@@ -8,7 +8,7 @@ import {
   Grid,
 } from '@mui/material';
 
-const API_URL = 'http://localhost:5000';
+const API_URL = 'https://cubedata.netlify.app';
 
 const DataRankings = () => {
   const [competitor, setCompetitor] = useState('');

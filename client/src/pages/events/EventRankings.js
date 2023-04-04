@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Box, Typography, Grid, useMediaQuery, Theme} from '@mui/material';
 
-const API_URL = 'http://localhost:5000';
+const API_URL = 'https://cubedata.netlify.app';
 
 export default function EventRankings() {
   const { eventId, round } = useParams();

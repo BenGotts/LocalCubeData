@@ -11,7 +11,7 @@ import {
   Checkbox,
 } from '@mui/material';
 
-const API_URL = 'http://localhost:5000';
+const API_URL = 'https://cubedata.netlify.app';
 
 const Admin = () => {
   const [events, setEvents] = useState([]);
