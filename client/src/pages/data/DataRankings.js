@@ -24,6 +24,25 @@ const DataRankings = () => {
       });
   }, []);
 
+  const submitData = () => {
+    const attempts = [attempt1, attempt2, attempt3, attempt4, attempt5];
+    const formattedData = {
+      name: name,
+      attempts: attempts.map((attempt) => attempt.value),
+    };
+  
+    fetch(`${API_URL}/api/data/submit`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formattedData),
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.error('Error:', error));
+  };  
+
   const parseDuration = (value) => {
     if (value.toLowerCase() === 'dnf') return -1;
     if (value.toLowerCase() === 'dns') return -2;
@@ -113,6 +132,9 @@ const DataRankings = () => {
           </Grid>
         ))}
       </Grid>
+      <Button variant="contained" color="primary" onClick={submitData}>
+        Submit
+      </Button>
     </Box>
   );
 };
