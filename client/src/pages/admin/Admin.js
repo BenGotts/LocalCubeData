@@ -20,7 +20,7 @@ const Admin = () => {
   const [competitorName, setCompetitorName] = useState('');
 
   useEffect(() => {
-    fetch(`${API_URL}/api/data`)
+    fetch('/api/data')
       .then((response) => response.json())
       .then((data) => { setEvents(data['events']); setEventNames(data['allEvents'])});
   }, []);

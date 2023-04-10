@@ -17,7 +17,7 @@ const DataRankings = () => {
   const [attempts, setAttempts] = useState(Array(5).fill(''));
 
   useEffect(() => {
-    fetch(`${API_URL}/api/data`)
+    fetch('/api/data')
       .then((response) => response.json())
       .then((data) => {
         setCompetitors(data.competitors.map((competitor) => `${competitor.name} (${competitor.id})`));
@@ -31,7 +31,7 @@ const DataRankings = () => {
     //   attempts: attempts.map((attempt) => attempt.value),
     // };
   
-    fetch(`${API_URL}/api/data/submit`, {
+    fetch('/api/data/submit', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ const DataRankings = () => {
     };
 
     // Send data to the server
-    fetch(`${API_URL}/api/data/`, {
+    fetch('/api/data/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

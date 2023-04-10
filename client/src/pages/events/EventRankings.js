@@ -10,7 +10,7 @@ export default function EventRankings() {
   const [eventNames, setEventNames] = useState({});
 
   useEffect(() => {
-    fetch(`${API_URL}/api/data`)
+    fetch('/api/data')
       .then((response) => response.json())
       .then((data) => {
         setRankings(data['events'][eventId][round]);
