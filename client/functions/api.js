@@ -37,7 +37,7 @@ const dataFilePath = path.join(__dirname, 'data', 'db.json');
 const tmpDataFilePath = '/tmp/db.json';
 fs.copyFileSync(dataFilePath, tmpDataFilePath);
 
-const data = require('./data/db.json');
+// const data = require('./data/db.json');
 
 app.use(express.json());
 app.use(cors());
@@ -67,6 +67,8 @@ function calculateAverage(attempts) {
   
 // Your Express routes and middleware
 app.get('/api/data', (req, res) => {
+    const rawData = fs.readFileSync(tmpDataFilePath);
+    const data = JSON.parse(rawData);
     res.status(200)
     res.send(data)
 });
