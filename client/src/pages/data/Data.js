@@ -20,7 +20,7 @@ const Data = () => {
   return (
     <div>
       <Typography variant="h4" gutterBottom>
-        Events List
+        Data Events List
       </Typography>
       <List>
         {Object.entries(events).map(([eventId, eventRounds]) => {

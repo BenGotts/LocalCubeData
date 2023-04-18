@@ -28,9 +28,12 @@
 
 const express = require('express');
 const serverless = require('serverless-http');
+const cors = require('cors');
 const app = express();
 
-const data = require('../server/data/db.json');
+const data = require('./data/db.json');
+
+app.use(cors());
 
 // Your Express routes and middleware
 app.get('/api/data', (req, res) => {

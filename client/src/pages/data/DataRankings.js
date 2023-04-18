@@ -6,6 +6,7 @@ import {
   Box,
   Container,
   Grid,
+  Typography,
 } from '@mui/material';
 
 const API_URL = 'https://cubedata.netlify.app';
@@ -45,7 +46,7 @@ const DataRankings = () => {
 
   const parseDuration = (value) => {
     if (value.toLowerCase() === 'dnf') return -1;
-    if (value.toLowerCase() === 'dns') return -2;
+    if (value.toLowerCase() === 'dns') return 0;
 
     const timeRegex = /^(\d+):(\d{2}\.\d{2})$/;
     const match = value.match(timeRegex);
@@ -103,39 +104,48 @@ const DataRankings = () => {
     setAttempts(Array(5).fill(''));
   };
 
+  const single = 123;
+  const average = 234;
+
   return (
-    <Box>
-      <Box display="flex" justifyContent="center">
-        <Autocomplete
-          sx={{ width: '50%' }} 
-          options={competitors}
-          freeSolo
-          inputValue={competitor}
-          onInputChange={(event, newValue) => setCompetitor(newValue)}
-          renderInput={(params) => (
-            <TextField {...params} label="Competitor Name" margin="normal"/>
-          )}
-        />
-      </Box>
-      <Grid container spacing={2} direction="column">
-        {attempts.map((attempt, index) => (
-          <Grid item key={index}>
-            <Box display="flex" justifyContent="center">
-              <TextField
-                name={index.toString()}
-                label={`Attempt ${index + 1}`}
-                value={attempt}
-                onChange={handleDurationChange}
-                sx={{ width: '50%' }}
-              />
-            </Box>
-          </Grid>
-        ))}
-      </Grid>
+  <Box>
+    <Box display="flex" justifyContent="center">
+      <Autocomplete
+        sx={{ width: '50%' }} 
+        options={competitors}
+        freeSolo
+        inputValue={competitor}
+        onInputChange={(event, newValue) => setCompetitor(newValue)}
+        renderInput={(params) => (
+          <TextField {...params} label="Competitor Name" margin="normal"/>
+        )}
+      />
+    </Box>
+    <Grid container spacing={2} direction="column">
+      {attempts.map((attempt, index) => (
+        <Grid item key={index}>
+          <Box display="flex" justifyContent="center">
+            <TextField
+              name={index.toString()}
+              label={`Attempt ${index + 1}`}
+              value={attempt}
+              onChange={handleDurationChange}
+              sx={{ width: '50%' }}
+            />
+          </Box>
+        </Grid>
+      ))}
+    </Grid>
+    <Box display="flex" justifyContent="center" mt={2}>
       <Button variant="contained" color="primary" onClick={submitData}>
         Submit
       </Button>
     </Box>
+    <Box display="flex" flexDirection="column" alignItems="center" mt={2}>
+      <Typography variant="h6">Single: {single ? single : ""}</Typography>
+      <Typography variant="h6">Average: {average ? average : ""}</Typography>
+    </Box>
+  </Box>  
   );
 };
 
