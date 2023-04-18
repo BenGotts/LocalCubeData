@@ -145,7 +145,7 @@ const DataRankings = () => {
     };
 
     // Send data to the server
-    fetch('/api/data/', {
+    fetch('/api/data/submit', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
