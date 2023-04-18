@@ -1,5 +1,5 @@
-const firebase =  require("firebase/app");
-require("firebase/firestore");
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
     apiKey: "AIzaSyAWOS82XEel3F3oY36BHDMwOhOren62PR8",
@@ -12,9 +12,9 @@ const firebaseConfig = {
   };
 
 // Initialize Firebase
-const firebaseApp = firebase.initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
 // Initialize Firestore
-const db = firebaseApp.firestore();
+const db = getFirestore(app);
 
 module.exports = { db };
