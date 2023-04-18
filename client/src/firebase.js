@@ -1,22 +1,11 @@
-const { initializeApp } = require('firebase-admin/app');
-const { getFirestore } = require('firebase-admin/firestore');
+const admin = require("firebase-admin");
 
-const firebaseConfig = {
-    apiKey: "AIzaSyAWOS82XEel3F3oY36BHDMwOhOren62PR8",
-    authDomain: "localcubedata.firebaseapp.com",
-    projectId: "localcubedata",
-    storageBucket: "localcubedata.appspot.com",
-    messagingSenderId: "869499316871",
-    appId: "1:869499316871:web:faa2a74b8cabd6f0bd6622",
-    measurementId: "G-CPYFVDHFK6"
-  };
+const serviceAccount = require("../service.json");
 
-// Initialize Firebase
-// const app = initializeApp(firebaseConfig);
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
 
-// Initialize Firestore
-// const db = getFirestore(app);
-initializeApp();
-const db = getFirestore();
+const db = admin.firestore();
 
 module.exports = { db };
