@@ -25,19 +25,14 @@
 
 // module.exports.handler = serverless(app);
 
-const fs = require('fs');
-const path = require('path');
 const express = require('express');
 const serverless = require('serverless-http');
 const cors = require('cors');
 const app = express();
 
-// Copy the JSON file to the /tmp directory
-const dataFilePath = path.join(__dirname, 'data', 'db.json');
-// const tmpDataFilePath = '/tmp/db.json';
-// fs.copyFileSync(dataFilePath, tmpDataFilePath);
+const { db } = require('../src/firebase');
 
-// const data = require('./data/db.json');
+const allEvents = require('./data/allEvents.json');
 
 app.use(express.json());
 app.use(cors());
@@ -66,58 +61,63 @@ function calculateAverage(attempts) {
 }
   
 // Your Express routes and middleware
-app.get('/api/data', (req, res) => {
-    const rawData = fs.readFileSync(dataFilePath);
-    const data = JSON.parse(rawData);
-    res.status(200)
-    res.send(data)
-});
-
-app.post('/api/data/submit', (req, res) => {
-    console.log(req.body);
-    const { competitorId, eventId, round, attempts } = req.body;
+app.get('/api/data', async (req, res) => {
+    try {
+      const competitorsSnapshot = await db.collection('competitors').get();
+      const competitors = competitorsSnapshot.docs.map(doc => doc.data());
   
-    // Read data from the JSON file
-    const rawData = fs.readFileSync(dataFilePath);
-    const data = JSON.parse(rawData);
+      const eventsSnapshot = await db.collection('events').get();
+      const events = {};
+      await Promise.all(eventsSnapshot.docs.map(async doc => {
+        const eventId = doc.id;
+        const roundsSnapshot = await doc.ref.collection('rounds').get();
+        const roundsData = {};
+        roundsSnapshot.docs.forEach(roundDoc => {
+          roundsData[roundDoc.id] = roundDoc.data().results;
+        });
+        events[eventId] = roundsData;
+      }));
   
-    // Check if the competitor exists
-    const competitor = data.competitors.find(c => c.id === competitorId);
-  
-    // If the competitor doesn't exist, add a new competitor
-    if (!competitor) {
-      const newCompetitor = {
-        id: competitorId,
-        name: req.body.name,
-        events: [eventId],
-      };
-      data.competitors.push(newCompetitor);
-    } else {
-      if (!competitor.events.includes(eventId)) competitor.events.push(eventId);
+      res.json({ competitors, events, allEvents });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      res.status(500).json({ message: 'Error fetching data' });
     }
-  
-    // Add the results to the appropriate event and round
-    const event = data.events[eventId] || {};
-    const roundData = event[round] || [];
-    const bestSingle = Math.min(...attempts.filter(attempt => attempt > 0));
-    // const average = /* calculate the average here */;
-  
-    roundData.push({
-      name: req.body.name,
-      attempts: req.body.attempts,
-      bestSingle: req.body.bestSingle,
-      average: req.body.average,
-    });
-  
-    event[round] = roundData;
-    data.events[eventId] = event;
-  
-    // Save the updated data back to the JSON file
-    const updatedData = JSON.stringify(data, null, 2);
-    fs.writeFileSync(tmpDataFilePath, updatedData);
-  
-    res.status(200).json({ message: 'Data submitted successfully' });
   });
+
+  app.post('/api/data/submit', async (req, res) => {
+    const { competitorId, eventId, round, attempts, bestSingle, average } = req.body;
+  
+    try {
+      // Get competitor reference
+      const competitorRef = db.collection('competitors').doc(String(competitorId));
+  
+      // Update competitor's events if necessary
+      const competitorDoc = await competitorRef.get();
+      if (!competitorDoc.exists || !competitorDoc.data().events.includes(eventId)) {
+        await competitorRef.update({
+          events: firebase.firestore.FieldValue.arrayUnion(eventId)
+        });
+      }
+  
+      // Add the results to the appropriate event and round
+      const roundRef = db.collection('events').doc(eventId).collection('rounds').doc(round);
+      await roundRef.update({
+        results: firebase.firestore.FieldValue.arrayUnion({
+          competitorId,
+          attempts,
+          bestSingle,
+          average
+        })
+      });
+  
+      res.status(200).json({ message: 'Data submitted successfully' });
+    } catch (error) {
+      console.error('Error submitting data:', error);
+      res.status(500).json({ message: 'Error submitting data' });
+    }
+  });
+  
   
 
 // Export the handler for the Netlify Function
