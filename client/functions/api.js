@@ -36,6 +36,29 @@ const data = require('./data/db.json');
 
 app.use(cors());
 
+function calculateAverage(attempts) {
+    const filteredAttempts = attempts.filter((a) => a > 0);
+  
+    // Sort attempts in ascending order
+    const sortedAttempts = filteredAttempts.slice().sort((a, b) => a - b);
+  
+    if (sortedAttempts.length < 4) {
+        return 'DNF';
+    } else if (sortedAttempts.length == 4) {
+        sortedAttempts.shift();
+    } else {
+        sortedAttempts.pop();
+        sortedAttempts.shift();
+    }
+  
+    // Calculate the average of the middle 3
+    const sum = sortedAttempts.reduce((acc, cur) => acc + cur, 0);
+    const average = sum / 3;
+  
+    // Return the average rounded to 2 decimal places
+    return average.toFixed(2);
+}
+  
 // Your Express routes and middleware
 app.get('/api/data', (req, res) => {
     res.status(200)
@@ -58,9 +81,11 @@ app.post('/api/data/submit', (req, res) => {
       const newCompetitor = {
         id: competitorId,
         name: req.body.name,
-        events: `${eventId}`,
+        events: [eventId],
       };
       data.competitors.push(newCompetitor);
+    } else {
+      if (!competitor.events.includes(eventId)) competitor.events.push(eventId);
     }
   
     // Add the results to the appropriate event and round

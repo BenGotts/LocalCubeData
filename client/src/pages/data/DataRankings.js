@@ -12,12 +12,37 @@ import {
 
 const API_URL = 'https://cubedata.netlify.app';
 
+function calculateAverage(attempts) {
+  const filteredAttempts = attempts.filter((a) => a > 0);
+
+  // Sort attempts in ascending order
+  const sortedAttempts = filteredAttempts.slice().sort((a, b) => a - b);
+
+  if (sortedAttempts.length < 4) {
+      return 'DNF';
+  } else if (sortedAttempts.length == 4) {
+      sortedAttempts.shift();
+  } else {
+      sortedAttempts.pop();
+      sortedAttempts.shift();
+  }
+
+  // Calculate the average of the middle 3
+  const sum = sortedAttempts.reduce((acc, cur) => acc + cur, 0);
+  const average = sum / 3;
+
+  // Return the average rounded to 2 decimal places
+  return average.toFixed(2);
+}
+
 const DataRankings = () => {
   const { eventId, round } = useParams();
   const [competitor, setCompetitor] = useState('');
   const [competitors, setCompetitors] = useState([]);
   const [selectedCompetitor, setSelectedCompetitor] = useState(null);
   const [attempts, setAttempts] = useState(Array(5).fill(''));
+  const [average, setAverage] = useState(0);
+  const [single, setSingle] = useState(0);
   const [data, setData] = useState({});
 
   useEffect(() => {
@@ -30,6 +55,14 @@ const DataRankings = () => {
       document.title = `${eventId} ${round} Data`;
   }, []);
 
+  useEffect(() => {
+    if (attempts.length === 5) {
+      const newBest = Math.min(...attempts.filter(attempt => attempt > 0));
+      setSingle(newBest);
+      setAverage(calculateAverage(attempts));
+    }
+  }, [attempts]);
+  
   const submitData = () => {
     // const attempts = [attempt1, attempt2, attempt3, attempt4, attempt5];
     // const formattedData = {
@@ -104,7 +137,11 @@ const DataRankings = () => {
     // Data to be sent to the server
     const data = {
       competitor: selectedCompetitor,
-      durations: attempts,
+      eventId: eventId,
+      round: round,
+      attempts: attempts.map(parseDuration),
+      bestSingle: single,
+      average: average,
     };
 
     // Send data to the server
@@ -128,8 +165,8 @@ const DataRankings = () => {
     setAttempts(Array(5).fill(''));
   };
 
-  const single = 123;
-  const average = 234;
+  // const single = 123;
+  // const average = 234;
 
   return (
   <Box>
@@ -161,7 +198,7 @@ const DataRankings = () => {
       ))}
     </Grid>
     <Box display="flex" justifyContent="center" mt={2}>
-      <Button variant="contained" color="primary" onClick={submitData}>
+      <Button variant="contained" color="primary" onClick={handleSubmit}>
         Submit
       </Button>
     </Box>

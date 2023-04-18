@@ -1,7 +1,7 @@
 {
-    "competitors": [{"id": 1, "name": "Benjamin Gottschalk", "events": "333"}],
-    "events": { "333": { "R1": [{"name": "Benjamin Gottschalk", "attempts": [1234, 1857, -1, 0, 9647], "bestSingle": 1234, "average": 9999 }],
-                         "Final": [{"name": "Benjamin Gottschalk", "attempts": [1234, 1857, -1, 0, 9647], "bestSingle": 1234, "average": 9999 }]},
+    "competitors": [],
+    "events": { "333": { "R1": [],
+                         "Final": []},
                 "222": { "Final" : []} },
     "allEvents": {
         "222": "2x2", 
