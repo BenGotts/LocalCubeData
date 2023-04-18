@@ -34,8 +34,8 @@ const app = express();
 
 const data = require('./data/db.json');
 
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 
 function calculateAverage(attempts) {
     const filteredAttempts = attempts.filter((a) => a > 0);
@@ -67,6 +67,7 @@ app.get('/api/data', (req, res) => {
 });
 
 app.post('/api/data/submit', (req, res) => {
+    console.log(req.body);
     const { competitorId, eventId, round, attempts } = req.body;
   
     // Read data from the JSON file
