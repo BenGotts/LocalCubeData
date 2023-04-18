@@ -23,6 +23,7 @@ const DataRankings = () => {
       .then((data) => {
         setCompetitors(data.competitors.map((competitor) => `${competitor.name} (${competitor.id})`));
       });
+      document.title = `${eventId} ${round} Data`;
   }, []);
 
   const submitData = () => {
