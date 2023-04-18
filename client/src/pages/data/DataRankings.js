@@ -83,8 +83,8 @@ const DataRankings = () => {
   };  
 
   const parseDuration = (value) => {
-    if (value.toLowerCase() === 'dnf') return -1;
-    if (value.toLowerCase() === 'dns') return 0;
+    if (String(value).toLowerCase() === 'dnf') return -1;
+    if (String(value).toLowerCase() === 'dns') return 0;
 
     const timeRegex = /^(\d+):(\d{2}\.\d{2})$/;
     const match = value.match(timeRegex);
