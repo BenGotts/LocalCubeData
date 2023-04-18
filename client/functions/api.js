@@ -98,9 +98,9 @@ app.post('/api/data/submit', (req, res) => {
   
     roundData.push({
       name: req.body.name,
-      attempts,
-      bestSingle,
-      average,
+      attempts: req.body.attempts,
+      bestSingle: req.body.bestSingle,
+      average: req.body.average,
     });
   
     event[round] = roundData;

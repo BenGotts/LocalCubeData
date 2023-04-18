@@ -140,8 +140,8 @@ const DataRankings = () => {
       eventId: eventId,
       round: round,
       attempts: attempts.map(parseDuration),
-      bestSingle: single,
-      average: average,
+      bestSingle: parseDuration(single),
+      average: parseDuration(average),
     };
 
     // Send data to the server
