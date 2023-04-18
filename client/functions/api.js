@@ -32,6 +32,11 @@ const serverless = require('serverless-http');
 const cors = require('cors');
 const app = express();
 
+// Copy the JSON file to the /tmp directory
+const dataFilePath = path.join(__dirname, 'data', 'db.json');
+const tmpDataFilePath = '/tmp/db.json';
+fs.copyFileSync(dataFilePath, tmpDataFilePath);
+
 const data = require('./data/db.json');
 
 app.use(express.json());
@@ -71,8 +76,7 @@ app.post('/api/data/submit', (req, res) => {
     const { competitorId, eventId, round, attempts } = req.body;
   
     // Read data from the JSON file
-    const dataFilePath = path.join(__dirname, 'data', 'db.json');
-    const rawData = fs.readFileSync(dataFilePath);
+    const rawData = fs.readFileSync(tmpDataFilePath);
     const data = JSON.parse(rawData);
   
     // Check if the competitor exists
@@ -108,7 +112,7 @@ app.post('/api/data/submit', (req, res) => {
   
     // Save the updated data back to the JSON file
     const updatedData = JSON.stringify(data, null, 2);
-    fs.writeFileSync(dataFilePath, updatedData);
+    fs.writeFileSync(tmpDataFilePath, updatedData);
   
     res.status(200).json({ message: 'Data submitted successfully' });
   });

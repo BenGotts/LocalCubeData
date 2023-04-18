@@ -93,11 +93,11 @@ const DataRankings = () => {
     if (match) {
       const minutes = parseInt(match[1], 10);
       const seconds = parseFloat(match[2]);
-      return (minutes * 60 + seconds) * 100;
+      return Math.round((minutes * 60 + seconds) * 100);
     }
   
     const seconds = parseFloat(stringValue);
-    if (!isNaN(seconds)) return seconds * 100;
+    if (!isNaN(seconds)) return Math.round(seconds * 100);
   
     return null;
   };
