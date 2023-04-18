@@ -1,5 +1,5 @@
-const { initializeApp } = require('firebase/app');
-const { getFirestore } = require('firebase/firestore');
+const { initializeApp } = require('firebase-admin/app');
+const { getFirestore } = require('firebase-admin/firestore');
 
 const firebaseConfig = {
     apiKey: "AIzaSyAWOS82XEel3F3oY36BHDMwOhOren62PR8",
