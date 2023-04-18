@@ -56,6 +56,7 @@ const DataRankings = () => {
   }, []);
 
   useEffect(() => {
+    console.log("HERE");
     if (attempts.length === 5) {
       const newBest = Math.min(...attempts.filter(attempt => attempt > 0));
       setSingle(newBest);
