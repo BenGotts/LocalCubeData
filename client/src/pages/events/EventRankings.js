@@ -16,6 +16,7 @@ export default function EventRankings() {
         setRankings(data['events'][eventId][round]);
         setEventNames(data['allEvents']);
       });
+    document.title = `${eventId} ${round}`;
   }, []);
 
   const renderAttempt = (attempt) => {

@@ -15,6 +15,7 @@ const Events = () => {
         setEvents(data["events"]);
         setEventNames(data["allEvents"]);
       });
+    document.title = 'Events';
   }, []);
 
   return (
