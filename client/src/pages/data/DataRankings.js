@@ -12,19 +12,24 @@ import {
 const API_URL = 'https://cubedata.netlify.app';
 
 const DataRankings = () => {
+  const { eventId, round } = useParams();
   const [competitor, setCompetitor] = useState('');
   const [competitors, setCompetitors] = useState([]);
   const [selectedCompetitor, setSelectedCompetitor] = useState(null);
   const [attempts, setAttempts] = useState(Array(5).fill(''));
+  const [data, setData] = useState({});
 
   useEffect(() => {
     fetch('/api/data')
       .then((response) => response.json())
-      .then((data) => {
-        setCompetitors(data.competitors.map((competitor) => `${competitor.name} (${competitor.id})`));
+      .then((newData) => {
+        setCompetitors(newData.competitors.map((competitor) => `${competitor.name} (${competitor.id})`));
+        setData(newData);
       });
       document.title = `${eventId} ${round} Data`;
   }, []);
+
+  console.log(data);
 
   const submitData = () => {
     // const attempts = [attempt1, attempt2, attempt3, attempt4, attempt5];
