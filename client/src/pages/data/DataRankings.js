@@ -30,8 +30,6 @@ const DataRankings = () => {
       document.title = `${eventId} ${round} Data`;
   }, []);
 
-  console.log(data);
-
   const submitData = () => {
     // const attempts = [attempt1, attempt2, attempt3, attempt4, attempt5];
     // const formattedData = {
@@ -79,6 +77,25 @@ const DataRankings = () => {
       updatedAttempts[Number(event.target.name)] = value;
       setAttempts(updatedAttempts);
     }
+  };
+
+  const renderAttempt = (attempt) => {
+    if (attempt === -1) {
+      return 'DNF';
+    } else if (attempt === 0) {
+      return 'DNS';
+    } else {
+      return formatTime(attempt);
+    }
+  };
+
+  const formatTime = (centiseconds) => {
+    const minutes = Math.floor(centiseconds / 6000);
+    const seconds = Math.floor((centiseconds % 6000) / 100);
+    const fraction = centiseconds % 100;
+    return minutes > 0
+      ? `${minutes}:${seconds.toString().padStart(2, '0')}.${fraction.toString().padStart(2, '0')}`
+      : `${seconds}.${fraction.toString().padStart(2, '0')}`;
   };
     
   const handleSubmit = (e) => {
@@ -149,8 +166,8 @@ const DataRankings = () => {
       </Button>
     </Box>
     <Box display="flex" flexDirection="column" alignItems="center" mt={2}>
-      <Typography variant="h6">Single: {single ? single : ""}</Typography>
-      <Typography variant="h6">Average: {average ? average : ""}</Typography>
+      <Typography variant="h6">Single: {single ? renderAttempt(single) : ""}</Typography>
+      <Typography variant="h6">Average: {average ? renderAttempt(average) : ""}</Typography>
     </Box>
   </Box>  
   );
