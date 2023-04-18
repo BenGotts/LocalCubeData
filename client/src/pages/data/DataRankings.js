@@ -39,7 +39,6 @@ const DataRankings = () => {
   const { eventId, round } = useParams();
   const [competitor, setCompetitor] = useState('');
   const [competitors, setCompetitors] = useState([]);
-  const [selectedCompetitor, setSelectedCompetitor] = useState(null);
   const [attempts, setAttempts] = useState(Array(5).fill(''));
   const [average, setAverage] = useState(0);
   const [single, setSingle] = useState(0);
@@ -137,7 +136,7 @@ const DataRankings = () => {
 
     // Data to be sent to the server
     const data = {
-      competitor: selectedCompetitor,
+      competitor: competitor,
       eventId: eventId,
       round: round,
       attempts: attempts.map(parseDuration),
@@ -162,7 +161,7 @@ const DataRankings = () => {
       });
 
     // Clear input fields after submission
-    setSelectedCompetitor(null);
+    setCompetitor(null);
     setAttempts(Array(5).fill(''));
   };
 
