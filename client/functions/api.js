@@ -34,8 +34,8 @@ const app = express();
 
 // Copy the JSON file to the /tmp directory
 const dataFilePath = path.join(__dirname, 'data', 'db.json');
-const tmpDataFilePath = '/tmp/db.json';
-fs.copyFileSync(dataFilePath, tmpDataFilePath);
+// const tmpDataFilePath = '/tmp/db.json';
+// fs.copyFileSync(dataFilePath, tmpDataFilePath);
 
 // const data = require('./data/db.json');
 
@@ -67,7 +67,7 @@ function calculateAverage(attempts) {
   
 // Your Express routes and middleware
 app.get('/api/data', (req, res) => {
-    const rawData = fs.readFileSync(tmpDataFilePath);
+    const rawData = fs.readFileSync(dataFilePath);
     const data = JSON.parse(rawData);
     res.status(200)
     res.send(data)
@@ -78,7 +78,7 @@ app.post('/api/data/submit', (req, res) => {
     const { competitorId, eventId, round, attempts } = req.body;
   
     // Read data from the JSON file
-    const rawData = fs.readFileSync(tmpDataFilePath);
+    const rawData = fs.readFileSync(dataFilePath);
     const data = JSON.parse(rawData);
   
     // Check if the competitor exists
