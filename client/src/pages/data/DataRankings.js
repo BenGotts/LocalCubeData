@@ -165,9 +165,6 @@ const DataRankings = () => {
     setAttempts(Array(5).fill(''));
   };
 
-  // const single = 123;
-  // const average = 234;
-
   return (
   <Box>
     <Box display="flex" justifyContent="center">

@@ -35,6 +35,7 @@ const app = express();
 const data = require('./data/db.json');
 
 app.use(cors());
+app.use(express.json());
 
 function calculateAverage(attempts) {
     const filteredAttempts = attempts.filter((a) => a > 0);
