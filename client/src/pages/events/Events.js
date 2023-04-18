@@ -12,6 +12,7 @@ const Events = () => {
     fetch('/api/data')
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         setEvents(data["events"]);
         setEventNames(data["allEvents"]);
       });
